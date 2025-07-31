@@ -119,7 +119,8 @@
         const readerLabel = new FileReader();
         readerLabel.onload = function(e2) {
           const allLabels = e2.target.result
-            .split(/\\r?\\n/)
+            .replace(/\r/g, "\n")
+            .split("\n")
             .map(x => x.trim())
             .filter(x => x.length > 0);
 
