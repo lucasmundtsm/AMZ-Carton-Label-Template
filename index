@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Amazon ASN Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      max-width: 600px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input[type="file"] {
+      margin-bottom: 10px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    #status {
+      margin-top: 20px;
+      font-style: italic;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Amazon Carton Label Processor</h2>
+
+  <form id="uploadForm">
+    <label for="cartonFile">Carton Excel File (.xlsx):</label>
+    <input type="file" id="cartonFile" name="carton_file" required>
+
+    <label for="labelFile">AMZN Carton & Pallet Labels (.csv):</label>
+    <input type="file" id="labelFile" name="label_file" required>
+
+    <label for="asnTemplateFile">ASN Template File (.csv):</label>
+    <input type="file" id="asnTemplateFile" name="asn_template_file" required>
+
+    <button type="submit">Generate ASN CSV</button>
+  </form>
+
+  <p id="status"></p>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      status.textContent = 'Processing... Please wait.';
+
+      const formData = new FormData();
+      formData.append('carton_file', document.getElementById('cartonFile').files[0]);
+      formData.append('label_file', document.getElementById('labelFile').files[0]);
+      formData.append('asn_template_file', document.getElementById('asnTemplateFile').files[0]);
+
+      try {
+        const response = await fetch('/process', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          status.textContent = `Error: ${error.error}`;
+          return;
+        }
+
+        const blob = await response.blob();
+        const filename = response.headers.get('Content-Disposition').split('filename=')[1];
+
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+
+        status.textContent = 'Download started.';
+      } catch (err) {
+        status.textContent = 'Error during processing.';
+        console.error(err);
+      }
+    });
+  </script>
+
+</body>
+</html>
