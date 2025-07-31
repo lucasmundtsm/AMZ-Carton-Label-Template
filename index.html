@@ -118,12 +118,16 @@
 
         const readerLabel = new FileReader();
         readerLabel.onload = function(e2) {
-          const allLabels = e2.target.result.split(/\\r?\\n/).filter(Boolean);
+          const allLabels = e2.target.result
+            .split(/\\r?\\n/)
+            .map(x => x.trim())
+            .filter(x => x.length > 0);
+
           const cartonLabelCount = flattenedCartons.length;
           const totalLabelCount = allLabels.length;
 
           if (totalLabelCount < cartonLabelCount) {
-            alert("Not enough AMZN labels to assign to all cartons.");
+            alert(`Not enough AMZN labels. You have ${totalLabelCount}, but ${cartonLabelCount} cartons need labels.`);
             return;
           }
 
