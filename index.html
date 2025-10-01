@@ -1,164 +1,694 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Amazon ASN Tool | Simple Modern</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f6f8;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    header {
-      background-color: #0e1111;
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 1.8em;
-    }
-    main {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    h2 {
-      margin-top: 0;
-      font-weight: 500;
-    }
-    input[type="file"] {
-      display: block;
-      margin: 15px 0;
-      padding: 6px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #0073e6;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    button:hover {
-      background-color: #005bb5;
-    }
-    .footer {
-      text-align: center;
-      font-size: 0.85em;
-      color: #888;
-      margin-top: 40px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carton Label Websheet Tool - Simple Modern</title>
+    <meta name="description" content="Professional ASN Websheet Import Generator">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #3b6cb8 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .company-name {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .tool-title {
+            font-size: 1.2rem;
+            color: #b0c4de;
+            font-weight: 400;
+            animation: fadeIn 0.8s ease-out 0.2s both;
+        }
+
+        .main-content {
+            background: rgba(10, 10, 10, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 35px 30px;
+            margin-bottom: 30px;
+            animation: slideUp 0.6s ease-out;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4ade80, transparent);
+            transform: translateX(-100%);
+            animation: lineSlide 3s ease-in-out infinite;
+        }
+
+        @keyframes lineSlide {
+            0%, 100% {
+                transform: translateX(-100%);
+            }
+            50% {
+                transform: translateX(100%);
+            }
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        .instructions {
+            background: rgba(20, 20, 20, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #b0c4de;
+        }
+
+        .instructions strong {
+            color: #ffffff;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #b0c4de;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .upload-section {
+            margin-bottom: 25px;
+        }
+
+        .upload-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(10, 10, 10, 0.4);
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: #4ade80;
+            background: rgba(20, 20, 20, 0.6);
+        }
+
+        .upload-area.dragover {
+            border-color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-area p {
+            margin: 0;
+            color: #b0c4de;
+            font-size: 1rem;
+        }
+
+        .upload-area .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-info {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-top: 12px;
+            color: #4ade80;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .file-info.show {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .process-btn {
+            width: 100%;
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            border: 1px solid #4ade80;
+            padding: 16px 32px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 25px;
+        }
+
+        .process-btn:hover:not(:disabled) {
+            background: #4ade80;
+            color: #000000;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(74, 222, 128, 0.3);
+        }
+
+        .process-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .process-btn:disabled {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.1);
+            cursor: not-allowed;
+        }
+
+        .output-section {
+            background: rgba(10, 10, 10, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 35px 30px;
+            margin-top: 30px;
+            display: none;
+            animation: slideUp 0.6s ease-out;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .output-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4ade80, transparent);
+            transform: translateX(-100%);
+            animation: lineSlide 3s ease-in-out infinite;
+        }
+
+        .output-section.show {
+            display: block;
+        }
+
+        .accuracy-section {
+            background: rgba(20, 20, 20, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .accuracy-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .accuracy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .accuracy-item {
+            background: rgba(10, 10, 10, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .accuracy-label {
+            color: #b0c4de;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .accuracy-value {
+            color: #4ade80;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .download-btn {
+            width: 100%;
+            background: #4ade80;
+            color: #000000;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 25px;
+        }
+
+        .download-btn:hover {
+            background: #22c55e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(74, 222, 128, 0.4);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            text-align: center;
+            padding-top: 40px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #b0c4de;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading animation */
+        .loading-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4ade80, transparent);
+            transform: translateX(-100%);
+            animation: loading 2s linear infinite;
+            display: none;
+        }
+
+        .loading-bar.show {
+            display: block;
+        }
+
+        @keyframes loading {
+            to {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .company-name, .tool-title {
+                font-size: 1.5rem;
+            }
+
+            .main-content {
+                padding: 25px 20px;
+            }
+
+            .accuracy-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Simple Modern | Amazon ASN Tool</h1>
-  </header>
-  <main>
-    <h2>Upload Your Files</h2>
-    <label>Carton Data Excel File (.xlsx):</label>
-    <input type="file" id="cartonFile" accept=".xlsx">
+    <div class="loading-bar" id="loadingBar"></div>
     
-    <label>AMZN Labels CSV (.csv):</label>
-    <input type="file" id="labelFile" accept=".csv">
-    
-    <label>ASN Template CSV (.csv):</label>
-    <input type="file" id="asnFile" accept=".csv">
-    
-    <button onclick="processFiles()">Generate ASN CSV</button>
-  </main>
-  <div class="footer">
-    &copy; 2025 Simple Modern
-  </div>
+    <div class="container">
+        <header class="header">
+            <h1 class="company-name">Simple Modern Logistics</h1>
+            <h2 class="tool-title">Carton Label Websheet Tool - Generate Import Files for Amazon Vendor Central</h2>
+        </header>
 
-  <script>
-    function processFiles() {
-      const cartonFile = document.getElementById('cartonFile').files[0];
-      const labelFile = document.getElementById('labelFile').files[0];
-      const asnFile = document.getElementById('asnFile').files[0];
+        <div class="main-content">
+            <h3 class="section-title">📦 Generate ASN Websheet Import File</h3>
 
-      if (!cartonFile || !labelFile || !asnFile) {
-        alert("Please upload all three files.");
-        return;
-      }
+            <div class="instructions">
+                <strong>Instructions:</strong>
+                <ol>
+                    <li>Upload your <strong>Carton Data Excel file</strong> (.xlsx) containing shipment information</li>
+                    <li>Upload your <strong>AMZN Labels CSV file</strong> (.csv) with carton and pallet labels</li>
+                    <li>Upload your <strong>ASN Template CSV file</strong> (.csv) for format reference</li>
+                    <li>Click "Generate ASN CSV" to process all files</li>
+                    <li>Download the generated ASN Websheet Import file with FC code and date in filename</li>
+                </ol>
+            </div>
 
-      const readerCarton = new FileReader();
-      readerCarton.onload = function(e) {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const cartonRows = XLSX.utils.sheet_to_json(sheet);
+            <div class="upload-section">
+                <label class="upload-label">1. Carton Data Excel File (.xlsx)</label>
+                <div class="upload-area" id="cartonUpload" onclick="document.getElementById('cartonFile').click()">
+                    <span class="icon">📊</span>
+                    <p>Click to upload or drag and drop your Excel file here</p>
+                </div>
+                <input type="file" id="cartonFile" accept=".xlsx">
+                <div class="file-info" id="cartonInfo"></div>
+            </div>
 
-        const flattenedCartons = [];
-        cartonRows.forEach(row => {
-          const count = parseInt(row["CARTONS"]);
-          const units = String(row["ctn qty"] ?? "");
-          for (let i = 0; i < count; i++) {
-            flattenedCartons.push({
-              PO: row["Order/PO Number"],
-              ASIN: row["ASIN"],
-              Units: units,
-              ExpDate: row["Expiration Date"] || "",
-              MfgDate: row["Manufacture Date"] || "",
-              Lot: row["Lot Number"] || ""
+            <div class="upload-section">
+                <label class="upload-label">2. AMZN Labels CSV (.csv)</label>
+                <div class="upload-area" id="labelUpload" onclick="document.getElementById('labelFile').click()">
+                    <span class="icon">🏷️</span>
+                    <p>Click to upload or drag and drop your labels CSV here</p>
+                </div>
+                <input type="file" id="labelFile" accept=".csv">
+                <div class="file-info" id="labelInfo"></div>
+            </div>
+
+            <div class="upload-section">
+                <label class="upload-label">3. ASN Template CSV (.csv)</label>
+                <div class="upload-area" id="asnUpload" onclick="document.getElementById('asnFile').click()">
+                    <span class="icon">📄</span>
+                    <p>Click to upload or drag and drop your ASN template here</p>
+                </div>
+                <input type="file" id="asnFile" accept=".csv">
+                <div class="file-info" id="asnInfo"></div>
+            </div>
+
+            <button class="process-btn" id="processBtn" onclick="processFiles()" disabled>Generate ASN CSV</button>
+        </div>
+
+        <div class="output-section" id="outputSection">
+            <h3 class="section-title">✅ Processing Complete</h3>
+            
+            <div class="accuracy-section">
+                <div class="accuracy-title">Output Overview & Accuracy Assurance</div>
+                <div class="accuracy-grid">
+                    <div class="accuracy-item">
+                        <div class="accuracy-label">Total Cartons</div>
+                        <div class="accuracy-value" id="totalCartons">-</div>
+                    </div>
+                    <div class="accuracy-item">
+                        <div class="accuracy-label">Total Pallets</div>
+                        <div class="accuracy-value" id="totalPallets">-</div>
+                    </div>
+                    <div class="accuracy-item">
+                        <div class="accuracy-label">Fulfillment Center</div>
+                        <div class="accuracy-value" id="fcCode">-</div>
+                    </div>
+                    <div class="accuracy-item">
+                        <div class="accuracy-label">Rows Generated</div>
+                        <div class="accuracy-value" id="rowsGenerated">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="download-btn" id="downloadBtn" onclick="downloadFile()">📥 Download ASN Websheet Import</button>
+        </div>
+
+        <footer class="footer">
+            <p>Professional Amazon Fulfillment Tools Suite</p>
+            <p>© 2025 Simple Modern Logistics. All tools run entirely in your browser.</p>
+        </footer>
+    </div>
+
+    <script>
+        let generatedWorkbook = null;
+        let outputFilename = '';
+        let cartonCount = 0;
+        let palletCount = 0;
+        let fcCodeValue = '';
+
+        // File upload handlers
+        const fileInputs = {
+            cartonFile: document.getElementById('cartonFile'),
+            labelFile: document.getElementById('labelFile'),
+            asnFile: document.getElementById('asnFile')
+        };
+
+        const uploadAreas = {
+            cartonFile: document.getElementById('cartonUpload'),
+            labelFile: document.getElementById('labelUpload'),
+            asnFile: document.getElementById('asnUpload')
+        };
+
+        const fileInfos = {
+            cartonFile: document.getElementById('cartonInfo'),
+            labelFile: document.getElementById('labelInfo'),
+            asnFile: document.getElementById('asnInfo')
+        };
+
+        // Setup file input handlers
+        Object.keys(fileInputs).forEach(key => {
+            fileInputs[key].addEventListener('change', function(e) {
+                handleFileSelect(key, e.target.files[0]);
             });
-          }
+
+            // Drag and drop handlers
+            uploadAreas[key].addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.add('dragover');
+            });
+
+            uploadAreas[key].addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('dragover');
+            });
+
+            uploadAreas[key].addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('dragover');
+                handleFileSelect(key, e.dataTransfer.files[0]);
+            });
         });
 
-        const readerLabel = new FileReader();
-        readerLabel.onload = function(e2) {
-          const allLabels = e2.target.result
-            .replace(/\r/g, "\n")
-            .split("\n")
-            .map(x => x.trim())
-            .filter(x => x.length > 0);
+        function handleFileSelect(inputKey, file) {
+            if (!file) return;
 
-          const cartonLabelCount = flattenedCartons.length;
-          const totalLabelCount = allLabels.length;
+            fileInputs[inputKey].files = createFileList(file);
+            fileInfos[inputKey].textContent = `✓ ${file.name} (${formatFileSize(file.size)})`;
+            fileInfos[inputKey].classList.add('show');
 
-          if (totalLabelCount < cartonLabelCount) {
-            alert(`Not enough AMZN labels. You have ${totalLabelCount}, but ${cartonLabelCount} cartons need labels.`);
-            return;
-          }
+            checkAllFilesUploaded();
+        }
 
-          const cartonLabels = allLabels.slice(0, cartonLabelCount);
-          const palletLabels = allLabels.slice(cartonLabelCount);
+        function createFileList(file) {
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            return dataTransfer.files;
+        }
 
-          const palletCount = palletLabels.length;
-          const cartonsPerPallet = Math.ceil(flattenedCartons.length / palletCount);
-          const output = [["Pallet label barcode","Carton label barcode","PO","ASIN","Units per carton","Expiration date","Manufacture date","Lot number"]];
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
 
-          let cartonIndex = 0;
-          for (let i = 0; i < palletCount; i++) {
-            const palletLabel = palletLabels[i];
-            for (let j = 0; j < cartonsPerPallet && cartonIndex < flattenedCartons.length; j++, cartonIndex++) {
-              const carton = flattenedCartons[cartonIndex];
-              const cartonLabel = cartonLabels[cartonIndex];
-              output.push([palletLabel, cartonLabel, carton.PO, carton.ASIN, carton.Units, carton.ExpDate, carton.MfgDate, carton.Lot]);
+        function checkAllFilesUploaded() {
+            const allUploaded = Object.keys(fileInputs).every(key => fileInputs[key].files.length > 0);
+            document.getElementById('processBtn').disabled = !allUploaded;
+        }
+
+        function getCurrentDateString() {
+            const now = new Date();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const year = now.getFullYear();
+            return `${month}.${day}.${year}`;
+        }
+
+        function processFiles() {
+            const cartonFile = fileInputs.cartonFile.files[0];
+            const labelFile = fileInputs.labelFile.files[0];
+            const asnFile = fileInputs.asnFile.files[0];
+
+            if (!cartonFile || !labelFile || !asnFile) {
+                alert("Please upload all three files.");
+                return;
             }
-          }
 
-          const ws = XLSX.utils.aoa_to_sheet(output);
-          const wb = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(wb, ws, "ASN Import");
+            document.getElementById('loadingBar').classList.add('show');
+            document.getElementById('processBtn').disabled = true;
+            document.getElementById('processBtn').textContent = 'Processing...';
 
-          XLSX.writeFile(wb, "ASN_Import_SimpleModern.csv");
-        };
-        readerLabel.readAsText(labelFile);
-      };
-      readerCarton.readAsArrayBuffer(cartonFile);
-    }
-  </script>
+            const readerCarton = new FileReader();
+            readerCarton.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                const cartonRows = XLSX.utils.sheet_to_json(sheet);
+
+                // Extract FC code from the first row
+                if (cartonRows.length > 0 && cartonRows[0]['Fulfillment Center']) {
+                    fcCodeValue = String(cartonRows[0]['Fulfillment Center']).trim();
+                }
+
+                const flattenedCartons = [];
+                cartonRows.forEach(row => {
+                    const count = parseInt(row["CARTONS"]);
+                    const units = String(row["ctn qty"] ?? "");
+                    for (let i = 0; i < count; i++) {
+                        flattenedCartons.push({
+                            PO: row["Order/PO Number"],
+                            ASIN: row["ASIN"],
+                            Units: units,
+                            ExpDate: row["Expiration Date"] || "",
+                            MfgDate: row["Manufacture Date"] || "",
+                            Lot: row["Lot Number"] || ""
+                        });
+                    }
+                });
+
+                cartonCount = flattenedCartons.length;
+
+                const readerLabel = new FileReader();
+                readerLabel.onload = function(e2) {
+                    const allLabels = e2.target.result
+                        .replace(/\r/g, "\n")
+                        .split("\n")
+                        .map(x => x.trim())
+                        .filter(x => x.length > 0);
+
+                    const totalLabelCount = allLabels.length;
+
+                    if (totalLabelCount < cartonCount) {
+                        alert(`Not enough AMZN labels. You have ${totalLabelCount}, but ${cartonCount} cartons need labels.`);
+                        document.getElementById('loadingBar').classList.remove('show');
+                        document.getElementById('processBtn').disabled = false;
+                        document.getElementById('processBtn').textContent = 'Generate ASN CSV';
+                        return;
+                    }
+
+                    const cartonLabels = allLabels.slice(0, cartonCount);
+                    const palletLabels = allLabels.slice(cartonCount);
+
+                    palletCount = palletLabels.length;
+                    const cartonsPerPallet = Math.ceil(flattenedCartons.length / palletCount);
+                    const output = [["Pallet label barcode","Carton label barcode","PO","ASIN","Units per carton","Expiration date","Manufacture date","Lot number"]];
+
+                    let cartonIndex = 0;
+                    for (let i = 0; i < palletCount; i++) {
+                        const palletLabel = palletLabels[i];
+                        for (let j = 0; j < cartonsPerPallet && cartonIndex < flattenedCartons.length; j++, cartonIndex++) {
+                            const carton = flattenedCartons[cartonIndex];
+                            const cartonLabel = cartonLabels[cartonIndex];
+                            output.push([palletLabel, cartonLabel, carton.PO, carton.ASIN, carton.Units, carton.ExpDate, carton.MfgDate, carton.Lot]);
+                        }
+                    }
+
+                    const ws = XLSX.utils.aoa_to_sheet(output);
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, "ASN Import");
+
+                    generatedWorkbook = wb;
+
+                    // Generate filename with FC code and current date
+                    const dateString = getCurrentDateString();
+                    outputFilename = `${fcCodeValue} ASN Websheet Import ${dateString}.csv`;
+
+                    // Update UI
+                    document.getElementById('totalCartons').textContent = cartonCount;
+                    document.getElementById('totalPallets').textContent = palletCount;
+                    document.getElementById('fcCode').textContent = fcCodeValue;
+                    document.getElementById('rowsGenerated').textContent = output.length - 1; // Exclude header
+
+                    document.getElementById('loadingBar').classList.remove('show');
+                    document.getElementById('outputSection').classList.add('show');
+                    document.getElementById('processBtn').textContent = 'Generate ASN CSV';
+                    
+                    // Scroll to output section
+                    document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                };
+                readerLabel.readAsText(labelFile);
+            };
+            readerCarton.readAsArrayBuffer(cartonFile);
+        }
+
+        function downloadFile() {
+            if (generatedWorkbook && outputFilename) {
+                XLSX.writeFile(generatedWorkbook, outputFilename);
+            }
+        }
+
+        // Remove loading bar after page loads
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loadingBar = document.querySelector('.loading-bar');
+                if (loadingBar && !loadingBar.classList.contains('show')) {
+                    loadingBar.style.display = 'none';
+                }
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
